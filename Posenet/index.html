@@ -1,0 +1,81 @@
+<html>
+  <head>
+    <!-- Load TensorFlow.js -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@0.11.7"></script>
+    <!-- Load Posenet -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/posenet@0.1.2"></script>
+ </head>
+
+  <body>
+  
+  	<video id="video" width="640" height="480" autoplay></video>
+	<button id="snap">Snap Photo</button>
+	<canvas id="canvas" width="640" height="480"></canvas>
+    <img id='cat' src='cat.jpg'/>
+    
+    
+  </body>
+  <!-- Place your code in the script tag below. You can also use an external .js file -->
+  <script>
+  
+	// Grab elements, create settings, etc.
+	var video = document.getElementById('video');
+
+	// Get access to the camera!
+	if(navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+    // Not adding `{ audio: true }` since we only want video now
+    	navigator.mediaDevices.getUserMedia({ video: true }).then(function(stream) {
+        video.src = window.URL.createObjectURL(stream);
+        video.play();
+    	});
+	}
+	
+	// Elements for taking the snapshot
+	 canvas = document.getElementById('canvas');
+	var context = canvas.getContext('2d');
+	var video = document.getElementById('video');
+
+	function refreshData()
+		{
+    	x = 5;  // 5 Seconds
+		context.drawImage(video, 0, 0, 640, 480);
+    	// Do your thing here
+		//Openpose
+	var imageScaleFactor = 0.5;
+    var outputStride = 16;
+    var flipHorizontal = false;
+
+    var imageElement = document.getElementById("canvas");
+
+    	posenet.load().then(function(net){
+     	 return net.estimateSinglePose(imageElement, imageScaleFactor, flipHorizontal, outputStride)
+   		 }).then(function(pose){
+      	//console.log(pose);
+      	
+    	})
+    	setTimeout(refreshData, x*10);
+		}
+	refreshData(); // execute function
+	
+	
+	// Trigger photo take
+	document.getElementById("snap").addEventListener("click", function() {
+	context.drawImage(video, 0, 0, 640, 480);
+	
+	//Openpose
+	var imageScaleFactor = 0.5;
+    var outputStride = 16;
+    var flipHorizontal = false;
+
+    var imageElement = document.getElementById('cat');
+
+    	posenet.load().then(function(net){
+     	 return net.estimateSinglePose(imageElement, imageScaleFactor, flipHorizontal, outputStride)
+   		 }).then(function(pose){
+      	console.log(pose);
+    	})
+		});
+	
+
+  </script>
+</html>

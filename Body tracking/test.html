@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>p5.play Example</title>
+    <script type="text/javascript" src="./js/p5.min.js"></script>
+    <script type="text/javascript" src="./js/p5.dom.min.js"></script>
+    <script type="text/javascript" src="./js/p5.sound.min.js"></script>
+    <script type="text/javascript" src="./js/ml5.min.js"></script>
+    <script type="text/javascript" src="./js/p5.play.js"></script>
+  
+</head>
+<body>
+
+<div id="canvasContainer">
+  <canvas id="defaultCanvas0" width="320" height="240"></canvas>
+
+
+<script>
+
+var hand;
+
+function setup() {
+  createCanvas(800, 300);
+  hand = createSprite(100, 150, 50, 100);
+  hand.addAnimation('moving', 'assets/hand001.png', 'assets/hand003.png');
+
+}
+
+function draw() {
+	background(255, 255, 255);
+   if(mouseX < hand.position.x - 10) {
+    hand.changeAnimation('moving');
+    //flip horizontally
+    hand.mirrorX(-1);
+    //negative x velocity: move left
+    hand.velocity.x = -2;
+    hand.rotation -= 10;
+  }
+   else if(mouseX > hand.position.x + 10) {
+    hand.changeAnimation('moving');
+    //unflip
+    hand.mirrorX(1);
+    hand.velocity.x = 2;
+    hand.rotation += 10;
+    
+  }
+  
+  drawSprites();
+}
+
+
+</script>
+
+</div>
+</body>
+</html>
